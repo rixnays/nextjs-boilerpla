@@ -1,103 +1,110 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
 
-export default function Page() {
-  const [show, setShow] = useState(false);
+export default function Home() {
+  const text = "sen bizi bulamazsın, biz seni buluruz";
+  
+  // Harf harf animasyon için kelimeleri ayırıyoruz
+  const letters = Array.from(text);
 
-  // Sayfa yüklendiğinde animasyonu başlat
-  useEffect(() => {
-    setShow(true);
-  }, []);
+  // Container animasyon ayarları
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.06, delayChildren: 0.3 * i },
+    }),
+  };
+
+  // Her bir harfin animasyon ayarı
+  const childVariants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
+
+  // Arka plan resmin (Discord linki patlarsa veya yavaş yüklenirse diye yedekli)
+  const bgImage = "https://cdn.discordapp.com/attachments/1512567298526019806/1526651197891678350/latest.png?ex=6a57cc39&is=6a567ab9&hm=683f8cdb39c5789ddcfcd9449c6b178b8aa7a98512d4af9303dc41f6e8680320&";
 
   return (
-    <main className="main-container">
-      <div className="bg-image" />
-      
-      <div className="content">
-        <h1 className={`glitch-text ${show ? 'animate' : ''}`}>
-          sen bizi bulamazsın, biz seni buluruz
+    <main 
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-4"
+      style={{
+        backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%), url('${bgImage}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Ekstra Karanlık ve Atmosferik Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-90 pointer-events-none" />
+
+      {/* Yazı Alanı */}
+      <motion.div
+        className="relative z-10 text-center max-w-4xl"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-widest select-none leading-relaxed uppercase">
+          {letters.map((letter, index) => (
+            <motion.span
+              key={index}
+              variants={childVariants}
+              className="inline-block cursor-default transition-all duration-300 hover:scale-125"
+              style={{
+                // Kırmızı, siyah ve beyaz geçişli mükemmel bir text-gradient animasyonu
+                background: 'linear-gradient(45deg, #ff0000, #ffffff, #0a0a0a, #ff0000, #ffffff)',
+                backgroundSize: '400% 400%',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                animation: 'textShine 6s ease-in-out infinite',
+                textShadow: '0 0 15px rgba(255, 0, 0, 0.4)',
+              }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
         </h1>
-      </div>
+
+        {/* Alt Kısma İnce Kırmızı Çizgi Efekti */}
+        <motion.div 
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: '60%', opacity: 1 }}
+          transition={{ delay: 2.2, duration: 1.5, ease: "easeInOut" }}
+          className="h-[1px] bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto mt-8 shadow-[0_0_10px_rgba(255,0,0,0.8)]"
+        />
+      </motion.div>
+
+      {/* CSS Animasyonunu eklemek için global stil */}
+      <style jsx global>{`
+        @keyframes textShine {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </main>
   );
 }
-        <h1 
-          className={`font-sans font-black text-4xl md:text-7xl text-white uppercase text-center tracking-wider transition-all duration-300 ${
-            isGlitching ? "glitch-effect" : ""
-          }`}
-          style={{
-            fontFamily: "'Orbitron', sans-serif"
-          }}
-        >
-          {displayText || "..."}
-        </h1>
-      </div>
-    </main>
-  );
-}
-        }
-
-        #text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
-            color: white;
-            text-transform: uppercase;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        /* Glitch Efekti */
-        .glitch {
-            animation: glitch 1s infinite alternate;
-        }
-
-        @keyframes glitch {
-            0% { text-shadow: 2px 0 #ff0000, -2px 0 #ffffff; transform: skewX(0deg); }
-            20% { text-shadow: -2px 0 #ff0000, 2px 0 #ffffff; transform: skewX(2deg); }
-            40% { text-shadow: 2px 0 #ff0000, -2px 0 #ffffff; transform: skewX(0deg); }
-            60% { text-shadow: 0px 0 0 #ff0000; transform: scale(1.05); }
-            100% { text-shadow: -1px 0 #ff0000, 1px 0 #ffffff; }
-        }
-
-        @media (max-width: 768px) {
-            #text { font-size: 2rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="bg"></div>
-
-    <div class="container">
-        <h1 id="text">...</h1>
-    </div>
-
-    <script>
-        const textElement = document.getElementById('text');
-        const phrase = "sen bizi bulamazsın, biz seni buluruz";
-        let index = 0;
-
-        function typeEffect() {
-            if (index < phrase.length) {
-                textElement.innerHTML = phrase.substring(0, index + 1);
-                index++;
-                setTimeout(typeEffect, 100);
-            } else {
-                // Yazı bittiğinde glitch animasyonunu ekle
-                textElement.classList.add('glitch');
-            }
-        }
-
-        // Tıklayınca başlat
-        document.body.addEventListener('click', () => {
-            if(index === 0) typeEffect();
-        }, { once: true });
-
-        // Veya sayfaya girince otomatik başlasın istersen:
-        window.onload = typeEffect;
-    </script>
-</body>
-</html>
