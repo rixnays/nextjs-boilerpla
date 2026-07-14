@@ -1,9 +1,8 @@
-'use client'; // Next.js App Router uyumluluğu için client bileşeni yapıyoruz
+'use client';
 
 import React from 'react';
 
 export default function Home() {
-  // Turbopack ile %100 uyumlu çalışan CSS animasyonları ve stiller
   const cssStyles = `
     @keyframes gradient-flow {
       0% { background-position: 0% 50%; }
@@ -39,16 +38,15 @@ export default function Home() {
 
   return (
     <main style={styles.container}>
-      {/* CSS Animasyonlarını güvenli şekilde sayfaya gömüyoruz */}
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
 
-      {/* Arka Plan Katmanı */}
+      {/* Arka Plan - cover ile ekranı %100 doldurmaya zorladık */}
       <div style={styles.backgroundImage} />
       
       {/* Karartma Overlay */}
       <div style={styles.overlay} />
 
-      {/* İçerik Alanı */}
+      {/* İçerik */}
       <div style={styles.content}>
         <h1 className="animated-gradient-text">
           sen bizi bulamazsın, biz seni buluruz
@@ -58,19 +56,18 @@ export default function Home() {
   );
 }
 
-// Inline CSS Styles - Sayfa dışına güvenli şekilde alındı
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
-    position: 'relative',
+    position: 'fixed', // Ekranı sabitlemek için
+    top: 0,
+    left: 0,
     width: '100vw',
-    height: '100vh',
+    height: '100dvh', // Modern mobil uyumu için 100dvh
     overflow: 'hidden',
-    margin: 0,
-    padding: 0,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
     backgroundColor: '#000',
   },
   backgroundImage: {
@@ -80,8 +77,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     width: '100%',
     height: '100%',
     backgroundImage: 'url("https://cdn.discordapp.com/attachments/1512567298526019806/1526651197891678350/latest.png?ex=6a57cc39&is=6a567ab9&hm=683f8cdb39c5789ddcfcd9449c6b178b8aa7a98512d4af9303dc41f6e8680320&")',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    backgroundPosition: 'center center', // Tam ortaya sabitledik
+    backgroundSize: 'cover', // Ekranı her yöne tamamlamasını sağlar
     backgroundRepeat: 'no-repeat',
     zIndex: 1,
   },
@@ -91,7 +88,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Resmin üzerine %60 karartma atar
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     zIndex: 2,
   },
   content: {
