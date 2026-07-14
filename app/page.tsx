@@ -1,39 +1,53 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE TRUTH</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+"use client";
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: black;
-        }
+import { useEffect, useState } from "react";
 
-        #bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://cdn.discordapp.com/attachments/1512567298526019806/1526651197891678350/latest.png?ex=6a57cc39&is=6a567ab9&hm=683f8cdb39c5789ddcfcd9449c6b178b8aa7a98512d4af9303dc41f6e8680320&');
-            background-size: cover;
-            background-position: center;
-            filter: brightness(0.4);
-            z-index: -1;
-        }
+export default function Home() {
+  const phrase = "sen bizi bulamazsın, biz seni buluruz";
+  const [displayText, setDisplayText] = useState("");
+  const [isGlitching, setIsGlitching] = useState(false);
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < phrase.length) {
+        setDisplayText((prev) => prev + phrase.charAt(index));
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsGlitching(true);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <main className="min-h-screen flex items-center justify-center p-4 md:p-8 selection:bg-rose-500 selection:text-white relative overflow-hidden bg-black">
+      {/* Arka Plan Görseli */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-fixed opacity-40"
+        style={{
+          backgroundImage: "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%), url('https://cdn.discordapp.com/attachments/1512567298526019806/1526651197891678350/latest.png?ex=6a57cc39&is=6a567ab9&hm=683f8cdb39c5789ddcfcd9449c6b178b8aa7a98512d4af9303dc41f6e8680320&')"
+        }}
+      />
+
+      {/* Yazı Alanı */}
+      <div className="z-10 flex justify-center items-center">
+        <h1 
+          className={`font-sans font-black text-4xl md:text-7xl text-white uppercase text-center tracking-wider transition-all duration-300 ${
+            isGlitching ? "glitch-effect" : ""
+          }`}
+          style={{
+            fontFamily: "'Orbitron', sans-serif"
+          }}
+        >
+          {displayText || "..."}
+        </h1>
+      </div>
+    </main>
+  );
+}
         }
 
         #text {
