@@ -39,7 +39,7 @@ export default function Home() {
     },
   };
 
-  // Arka plan resmin (Discord linki patlarsa veya yavaş yüklenirse diye yedekli)
+  // Arka plan resmin
   const bgImage = "https://cdn.discordapp.com/attachments/1512567298526019806/1526651197891678350/latest.png?ex=6a57cc39&is=6a567ab9&hm=683f8cdb39c5789ddcfcd9449c6b178b8aa7a98512d4af9303dc41f6e8680320&";
 
   return (
@@ -51,6 +51,18 @@ export default function Home() {
         backgroundPosition: 'center',
       }}
     >
+      {/* Animasyon için standart tarayıcı uyumlu style etiketi (Vercel'i patlatmaz) */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes textShine {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-shine {
+          animation: textShine 6s ease-in-out infinite;
+        }
+      `}} />
+
       {/* Ekstra Karanlık ve Atmosferik Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-90 pointer-events-none" />
 
@@ -66,14 +78,13 @@ export default function Home() {
             <motion.span
               key={index}
               variants={childVariants}
-              className="inline-block cursor-default transition-all duration-300 hover:scale-125"
+              className="inline-block cursor-default transition-all duration-300 hover:scale-125 animate-shine"
               style={{
                 // Kırmızı, siyah ve beyaz geçişli mükemmel bir text-gradient animasyonu
                 background: 'linear-gradient(45deg, #ff0000, #ffffff, #0a0a0a, #ff0000, #ffffff)',
                 backgroundSize: '400% 400%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                animation: 'textShine 6s ease-in-out infinite',
                 textShadow: '0 0 15px rgba(255, 0, 0, 0.4)',
               }}
             >
@@ -90,21 +101,6 @@ export default function Home() {
           className="h-[1px] bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto mt-8 shadow-[0_0_10px_rgba(255,0,0,0.8)]"
         />
       </motion.div>
-
-      {/* CSS Animasyonunu eklemek için global stil */}
-      <style jsx global>{`
-        @keyframes textShine {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-      `}</style>
     </main>
   );
 }
